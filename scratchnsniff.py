@@ -22,8 +22,13 @@ interface = str(args.interface)
 
 print("Scratch\'n\'Sniff - Remote Packet Capture Agent")
 
+if interface == 'any':
+    print("Error: Using interface \"any\" is not supported. It makes pyshark confused and breaks things.")
+    print("Please specify a an interface to capture on, or if you're handy, take a look at fixing this!")
+    sys.exit()
+
 if packet_filter == 'None':
-    packet_filter = 'net 0.0.0.0/0'  #Capture filter must be specified so capture any on any interface
+    packet_filter = ''
     print("Capturing and forwarding all traffic on interface " + str(interface))
 else:
     print("Forwarding all traffic matching filter " + str(packet_filter) + " on interface " + str(interface))
@@ -32,7 +37,7 @@ print("To remote host " + str(dest_ip) + " on UDP port " + str(dest_port))
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 def TZSP_Encap(data):
-    data = data.hex()               #Convert to Hex
+    data = data.hex()                #Convert to Hex
     return '0100000101' + data       #Append TZSP Header
 
 def Forward(data):
