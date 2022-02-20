@@ -1,4 +1,4 @@
-# Scrach'n'Sniff - Simple Remote Packet Sniffer / Mirooror
+# Scrach'n'Sniff - Simple Remote Packet Sniffer / Mirror
 
 ## What it Does
 
@@ -8,7 +8,7 @@ It captures packets matching the defined packet filters (standard [TCPDump filte
 
 ## Usage
 
-The require parameters are:
+The required parameters are:
 
 The **interface** to capture on (ie wlan0, eth0, enp0s25, etc) - This is the interface we will capture the traffic from. Usage of all interfaces (aka 'any') is not currently supported.
 
