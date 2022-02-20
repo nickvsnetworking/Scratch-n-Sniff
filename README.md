@@ -42,9 +42,16 @@ Capture all sctp and icmp traffic on interface lo and send it to 10.98.1.2:
 
 Clone the repo and install the requirements:
 
+You will need to have installed:
+* Python3
+* pip
+* tcpdump
+* tshark
+All of these packages are in the repos for common Linux distros.
+
 ```
 git clone https://github.com/nickvsnetworking/Scratch-n-Sniff
-pip3 install -r requirements.txt
+sudo pip3 install -r requirements.txt
 ```
 
 You can now call the program with ```python3 scratchnsniff.py``` and your arguments.
