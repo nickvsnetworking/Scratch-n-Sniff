@@ -50,8 +50,10 @@ You will need to have installed:
 All of these packages are in the repos for common Linux distros.
 
 ```
+apt-get install -y --assume-yes git python3-pip tshark 
 git clone https://github.com/nickvsnetworking/Scratch-n-Sniff
-sudo pip3 install -r requirements.txt
+cd Scratch-n-Sniff
+pip3 install -r requirements.txt
 ```
 
 You can now call the program with ```python3 scratchnsniff.py``` and your arguments.
