@@ -17,7 +17,7 @@ if args.dstport == None:
     dest_port = 37008   #Set Default Port if none specified
 else:
     dest_port = int(args.dstport)
-packet_filter = str(args.packetfilter)
+packet_filter = str(args.packetfilter) + ' and not port ' + str(dest_port)
 interface = str(args.interface)
 
 print("Scratch\'n\'Sniff - Remote Packet Capture Agent")
@@ -28,7 +28,7 @@ if interface == 'any':
     sys.exit()
 
 if packet_filter == 'None':
-    packet_filter = ''
+    packet_filter = 'not port ' + str(dest_port)
     print("Capturing and forwarding all traffic on interface " + str(interface))
 else:
     print("Forwarding all traffic matching filter " + str(packet_filter) + " on interface " + str(interface))
