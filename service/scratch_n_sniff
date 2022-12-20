@@ -1,0 +1,21 @@
+#!/bin/bash
+
+PIDFILE=/var/run/scratch_n_sniff.pid
+
+case $1 in
+   start)
+       # Launch your program as a detached process
+       cd /home/nick/scratch_n_sniff && python3 scratchnsniff.py --dstip 10.98.1.2 --packetfilter 'sctp or icmp' --interface lo
+       # Get its PID and store it
+       echo $! > ${PIDFILE} 
+   ;;
+   stop)
+      kill `cat ${PIDFILE}`
+      # Now that it's killed, don't forget to remove the PID file
+      rm ${PIDFILE}
+      pkill -9 -f hss.py
+   ;;
+   *)
+      echo "usage: scratch_n_sniff {start|stop}" ;;
+esac
+exit 0

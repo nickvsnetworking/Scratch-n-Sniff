@@ -57,3 +57,11 @@ pip3 install -r requirements.txt
 ```
 
 You can now call the program with ```python3 scratchnsniff.py``` and your arguments.
+
+
+## Service / Daemon 
+You can run the script as a service / Daemon by following the instructions [here](service/readme.md).
+
+## Support / Contact
+
+You can find me at [NickVsNetworking](http://nickvsnetworking.com).
