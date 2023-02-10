@@ -23,10 +23,7 @@ interface = str(args.interface)
 print("Scratch\'n\'Sniff - Remote Packet Capture Agent")
 
 if interface == 'any':
-    print("Error: Using interface \"any\" is not supported. It makes pyshark confused and breaks things.")
-    print("Please specify a an interface to capture on, or if you're handy, take a look at fixing this!")
-    sys.exit()
-
+    print("Warning: Using interface \"any\" is not supported. It makes pyshark confused and breaks things.")
 if packet_filter == 'None':
     packet_filter = 'not port ' + str(dest_port)
     print("Capturing and forwarding all traffic on interface " + str(interface))
