@@ -1,0 +1,11 @@
+localCapture:
+  # Maximum file size per capure, in kilobytes
+  maxFilesize: 200000
+  # Maximum amount of pcaps to store
+  maxPcaps: 5
+  # What to call the initial file. Note filename will be appended with sequence number and timestamp.
+  outputFile: ./localCapture.pcap
+  # Which ports to capture traffic on
+  portList:
+  - 80
+  - 443
