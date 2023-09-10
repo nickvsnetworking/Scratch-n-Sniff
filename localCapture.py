@@ -7,6 +7,7 @@ import gzip
 import os
 import socket
 import yaml
+from pathlib import Path
 
 # Local Capture agent for cylic packet capturing.
 # Parameters such as maximum number of pcap files kept, source port and rotation size are defined in config.yaml
@@ -16,8 +17,8 @@ with open("config.yaml", 'r') as configFile:
 
 maxFilesize = yamlConfig.get("localCapture", {}).get("maxFilesize", "200000") # Default 200mb max file size
 maxPcaps = yamlConfig.get("localCapture", {}).get("maxPcaps", "5") # Default max 5 pcaps
-outputFile = yamlConfig.get("localCapture", {}).get("outputFile", "./localCapture.pcap") # Default to the local directory
-outputDirectory = outputFile.split('/')[-2]
+outputFile = yamlConfig.get("localCapture", {}).get("outputFile", "/etc/localcapture/localCapture.pcap") # Default to the local directory
+outputDirectory = str(Path(outputFile).parent)
 portList = yamlConfig.get("localCapture", {}).get("portList", [])
 enableCompression = yamlConfig.get("localCapture", {}).get("enableCompression", True)
 hostname = socket.gethostname()
@@ -39,7 +40,9 @@ def rotatingCapture():
             os.remove(file)
 
         # Capture the PCAP
+        print(f"Running: dumpcap -i any -w {outputFile} -a filesize:{maxFilesize} {portFilter}")
         os.system(f'dumpcap -i any -w {outputFile} -a filesize:{maxFilesize} {portFilter}')
+        print("Done")
 
         timestamp = time.strftime("%Y%m%d-%H%M%S")
         # Give the PCAP a unique name by appending the timestamp
@@ -48,7 +51,7 @@ def rotatingCapture():
 
         if enableCompression:
             # Compress the file using GZIP, then delete the uncompressed file
-            with open(finalFilename, 'rb') as f_in, gzip.open(finalFilename + '.gz', 'wb') as f_out:
+            with open(finalFilename, 'rb') as f_in, gzip.open(f'/{outputDirectory}/{finalFilename}' + '.gz', 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
             os.remove(finalFilename)
         
@@ -58,8 +61,8 @@ def rotatingCapture():
         except Exception as e:
             pass
 
-        # Set '655' Permissions on the PCAP folder contents
-        os.system((f'chmod 655 {outputDirectory}/*'))
+        # Set '777' Permissions on the PCAP folder contents
+        os.system((f'chmod -R 777 {outputDirectory}'))
 
 
 if __name__ == '__main__':
