@@ -23,10 +23,33 @@ portList = yamlConfig.get("localCapture", {}).get("portList", [])
 enableCompression = yamlConfig.get("localCapture", {}).get("enableCompression", True)
 hostname = socket.gethostname()
 
+# Port range keyword mappings
+PORT_RANGES = {
+    'rtp': (16384, 32767),      # RTP dynamic port range
+    'ephemeral': (49152, 65535), # Ephemeral ports
+    'registered': (1024, 49151), # Registered ports
+    'sip': (5060, 5061),         # SIP signaling
+}
+
+def expand_port_list(port_list):
+    """Expand port list with keyword support into individual ports and ranges."""
+    expanded = []
+    for item in port_list:
+        if isinstance(item, str) and item.lower() in PORT_RANGES:
+            # It's a keyword, expand to all ports in the range
+            start, end = PORT_RANGES[item.lower()]
+            # Generate BPF filter for port range: (port >= start and port <= end)
+            expanded.append(f'(portrange {start}-{end})')
+        else:
+            # It's a specific port number
+            expanded.append(f'port {item}')
+    return expanded
+
 #Include a port filter, if defined.
 portFilter = ""
 if portList:
-    portFilter = ' or '.join(f'port {port}' for port in portList)
+    expanded_ports = expand_port_list(portList)
+    portFilter = ' or '.join(expanded_ports)
     portFilter = '-f ' + '"' + portFilter + '"'
 
 def rotatingCapture():
